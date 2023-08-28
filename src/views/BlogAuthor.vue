@@ -14,7 +14,7 @@
           </a>
           <!-- end of navbar-brand -->
 
-          <DefaultNavbar />
+          <AuthorNavbar />
           <!-- end of navbar -->
 
           <ul class="list-inline nml-2">
@@ -48,7 +48,7 @@
         <div class="container pt-4 mt-5">
           <div class="row justify-content-between">
             <div class="col-lg-7">
-                <MainContent
+                <AuthorMainContent
                  v-for="(blog, key) in blogs" :key="key"
                  :blogID="blog.id"
                  :cardPostItem="blog.cardPostItem"
@@ -80,13 +80,13 @@
 <script>
 import axios from 'axios'
 import { errorHandlingMixins } from '../mixins/errorHandlingMixins.js'
-import MainContent from '../components/MainContent.vue'
-import DefaultNavbar from '../components/DefaultNavbar.vue'
+import AuthorMainContent from '../components/AuthorMainContent.vue'
+import AuthorNavbar from '../components/AuthorNavbar.vue'
 export default {
   mixins: [errorHandlingMixins],
   components: {
-    MainContent,
-    DefaultNavbar
+    AuthorMainContent,
+    AuthorNavbar
   },
   data () {
     return {
@@ -97,7 +97,7 @@ export default {
     async listBlogPosts () {
       try {
         const response = await axios.get(
-          'http://localhost:8000/api/list-blogs-posted'
+          'http://localhost:8000/api/list-blog-author/' + this.$store.state.authorID
         )
         this.blogs = response.data
       } catch (error) {

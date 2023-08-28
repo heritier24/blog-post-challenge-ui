@@ -1,6 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import ListBlogDetails from '../views/BlogDetails.vue'
+import Login from '../views/LoginView.vue'
+import AuthorBlog from '../views/BlogAuthor.vue'
+import Register from '../views/RegisterView.vue'
+import PostBlog from '../views/PostBlog.vue'
+import UpdatePostBlogDetails from '../views/UpdateBlog.vue'
 
 Vue.use(VueRouter)
 
@@ -9,6 +15,36 @@ const routes = [
     path: '/',
     name: 'home',
     component: HomeView
+  },
+  {
+    path: '/list-blog/:id',
+    name: 'ListBlogDetails',
+    component: ListBlogDetails
+  },
+  {
+    path: '/author/blog',
+    name: AuthorBlog,
+    component: AuthorBlog
+  },
+  {
+    path: '/post-blog',
+    name: 'PostBlog',
+    component: PostBlog
+  },
+  {
+    path: '/update-post-blog/:id',
+    name: 'UpdatePostBlogDetails',
+    component: UpdatePostBlogDetails
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: Register
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login
   },
   {
     path: '/about',

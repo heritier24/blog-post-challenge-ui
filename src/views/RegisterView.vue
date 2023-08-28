@@ -48,28 +48,17 @@
         <div class="container pt-4 mt-5">
           <div class="row justify-content-between">
             <div class="col-lg-7">
-                <MainContent
-                 v-for="(blog, key) in blogs" :key="key"
-                 :blogID="blog.id"
-                 :cardPostItem="blog.cardPostItem"
-                 :authorName="blog.authorName"
-                 :cardBody="blog.cardBody"
-                 :cardTitle="blog.cardTitle"
-                 :content="blog.content"
-                 :linkClassReadmore="blog.linkClassReadmore"
-                 :paragraphClassBody="blog.paragraphClassBody"
-                 :postLinkClassAuthor="blog.postLinkClassAuthor"
-                 :postLinkClassPublished="blog.postLinkClassPublished"
-                 :postUlClass="blog.postUlClass"
-                 :published_at="blog.published_at"
-                 :readMore="blog.readMore"
-                 :readMoreImg="blog.readMoreImg"
-                 :spanPublishedClassIcon="blog.spanPublishedClassIcon"
-                 :title="blog.titles"
-                 :titleLinkClass="blog.titleLinkClass"
-                 />
-              <!-- end of post-item -->
-              <!-- end of post-item -->
+                <h2>Register Author To Create Blog Posts</h2><br><br><br>
+              <div class="row">
+                <label for="">Names:</label>
+                <input type="text" class="form-control" placeholder="Names" v-model="name"><br><br><br>
+                <label for="">Email:</label>
+                <input type="text" class="form-control" placeholder="email address" v-model="email">
+                <br><br><br>
+                <label for="">Password:</label>
+                <input type="password" class="form-control" placeholder="password" v-model="password"><br><br><br>
+                <button type="button" class="btn btn-success" style="margin-left: 590px;" @click="loginBtn();">Login</button>
+              </div>
             </div>
           </div>
         </div>
@@ -80,31 +69,35 @@
 <script>
 import axios from 'axios'
 import { errorHandlingMixins } from '../mixins/errorHandlingMixins.js'
-import MainContent from '../components/MainContent.vue'
 import DefaultNavbar from '../components/DefaultNavbar.vue'
 export default {
   mixins: [errorHandlingMixins],
   components: {
-    MainContent,
     DefaultNavbar
   },
   data () {
     return {
-      blogs: []
+      name: '',
+      email: '',
+      password: ''
     }
   },
   methods: {
-    async listBlogPosts () {
-      try {
-        const response = await axios.get(
-          'http://localhost:8000/api/list-blogs-posted'
-        )
-        this.blogs = response.data
-      } catch (error) {
+    async loginBtn () {
+      const data = {
+        name: this.name,
+        email: this.email,
+        password: this.password
       }
-    },
-    receiveDetailsBlog () {
-      alert(this.blogs[0].id)
+      try {
+        const response = await axios.post(
+          'http://localhost:8000/api/author', data
+        )
+        alert(response.data)
+        this.$router.push('/login')
+      } catch (error) {
+        alert(error.response.data.errors[0])
+      }
     }
   },
   mounted () {

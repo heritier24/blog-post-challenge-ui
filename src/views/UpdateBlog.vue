@@ -48,28 +48,18 @@
         <div class="container pt-4 mt-5">
           <div class="row justify-content-between">
             <div class="col-lg-7">
-                <MainContent
-                 v-for="(blog, key) in blogs" :key="key"
-                 :blogID="blog.id"
-                 :cardPostItem="blog.cardPostItem"
-                 :authorName="blog.authorName"
-                 :cardBody="blog.cardBody"
-                 :cardTitle="blog.cardTitle"
-                 :content="blog.content"
-                 :linkClassReadmore="blog.linkClassReadmore"
-                 :paragraphClassBody="blog.paragraphClassBody"
-                 :postLinkClassAuthor="blog.postLinkClassAuthor"
-                 :postLinkClassPublished="blog.postLinkClassPublished"
-                 :postUlClass="blog.postUlClass"
-                 :published_at="blog.published_at"
-                 :readMore="blog.readMore"
-                 :readMoreImg="blog.readMoreImg"
-                 :spanPublishedClassIcon="blog.spanPublishedClassIcon"
-                 :title="blog.titles"
-                 :titleLinkClass="blog.titleLinkClass"
-                 />
-              <!-- end of post-item -->
-              <!-- end of post-item -->
+                <h2>Update Blog Posts</h2><br><br><br>
+              <div class="row">
+                <label for="">Title:</label>
+                <input type="text" class="form-control" placeholder="title of Blog" v-model="title"><br><br><br>
+                <label for="">Published At::</label>
+                <input type="date" class="form-control" placeholder="email address" v-model="published_at">
+                <br><br><br>
+                <label for="">Content:</label>
+                <textarea type="text" class="form-control" placeholder="Entering Content" v-model="content"></textarea>
+                <p></p><br><br><br><br><br>
+                <button type="button" class="btn btn-success" style="margin-left: 500px;" @click="updateBlogPost();">Update Blog</button>
+              </div>
             </div>
           </div>
         </div>
@@ -80,35 +70,53 @@
 <script>
 import axios from 'axios'
 import { errorHandlingMixins } from '../mixins/errorHandlingMixins.js'
-import MainContent from '../components/MainContent.vue'
 import DefaultNavbar from '../components/DefaultNavbar.vue'
 export default {
   mixins: [errorHandlingMixins],
   components: {
-    MainContent,
     DefaultNavbar
   },
   data () {
     return {
-      blogs: []
+      title: '',
+      content: '',
+      published_at: '',
+      author_id: ''
     }
   },
   methods: {
-    async listBlogPosts () {
+    async updateBlogPost () {
+      const data = {
+        titles: this.title,
+        content: this.content,
+        published_at: this.published_at,
+        author_id: this.$store.state.authorID
+      }
       try {
-        const response = await axios.get(
-          'http://localhost:8000/api/list-blogs-posted'
+        const response = await axios.put(
+          'http://localhost:8000/api/update-post-blog/' + this.$route.params.id, data
         )
-        this.blogs = response.data
+        alert(response.data)
+        this.$router.push('/author/blog')
       } catch (error) {
+        alert(error.response.data.errors[0])
       }
     },
-    receiveDetailsBlog () {
-      alert(this.blogs[0].id)
+    async listBlogPostsToupdate () {
+      try {
+        const response = await axios.get(
+          'http://localhost:8000/api/list-blog/' + this.$route.params.id
+        )
+        this.title = response.data.titles
+        this.content = response.data.content
+        this.published_at = response.data.published_at
+      } catch (error) {
+        alert(error.response.data.errors[0])
+      }
     }
   },
   mounted () {
-    this.listBlogPosts()
+    this.listBlogPostsToupdate()
   }
 }
 </script>

@@ -14,7 +14,7 @@
           </a>
           <!-- end of navbar-brand -->
 
-          <DefaultNavbar />
+           <DefaultNavbar />
           <!-- end of navbar -->
 
           <ul class="list-inline nml-2">
@@ -97,14 +97,11 @@ export default {
     async listBlogPosts () {
       try {
         const response = await axios.get(
-          'http://localhost:8000/api/list-blogs-posted'
+          'http://localhost:8000/api/list-blog/' + this.$route.params.id
         )
         this.blogs = response.data
       } catch (error) {
       }
-    },
-    receiveDetailsBlog () {
-      alert(this.blogs[0].id)
     }
   },
   mounted () {
